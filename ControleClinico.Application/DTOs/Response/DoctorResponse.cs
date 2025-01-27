@@ -1,9 +1,8 @@
-﻿using ControleClinico.Domain.Common;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace ControleClinico.Domain.Entity
+namespace ControleClinico.Application.DTOs.Response
 {
-    public class Doctor : UserIdentifier
+    public class DoctorResponse
     {
         [Required(ErrorMessage = "O nome é requerido")]
         public string Name { get; set; }
@@ -19,7 +18,5 @@ namespace ControleClinico.Domain.Entity
         public string Crm { get; set; }
         [Required(ErrorMessage = "A especialidade é requerida")]
         public string Specialty { get; set; }
-
-        public virtual ICollection<Consultation> Consultations { get; set; }
     }
 }

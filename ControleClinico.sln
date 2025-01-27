@@ -9,19 +9,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{7FF054C9-981
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aplication", "Aplication", "{9BB506BB-3340-4EF8-8DBF-6E451896CA72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControleClinico.Domain", "ControleClinico.Domain\ControleClinico.Domain.csproj", "{C4504C45-49E6-4C12-89CE-3A93460A3D31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControleClinico.Domain", "ControleClinico.Domain\ControleClinico.Domain.csproj", "{C4504C45-49E6-4C12-89CE-3A93460A3D31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControleClinico.Application", "ControleClinico.Application\ControleClinico.Application.csproj", "{EA5D2373-51E3-40B1-8BE5-9827182D61C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControleClinico.Application", "ControleClinico.Application\ControleClinico.Application.csproj", "{EA5D2373-51E3-40B1-8BE5-9827182D61C9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infraestructure", "Infraestructure", "{029FD543-5A20-44F7-99DD-7515922BDE5C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControleClinico.Infraestructure", "ControleClinico.Infraestructure\ControleClinico.Infraestructure.csproj", "{F8913C1C-3293-4D06-89AA-7A20A845457C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControleClinico.Infraestructure", "ControleClinico.Infraestructure\ControleClinico.Infraestructure.csproj", "{F8913C1C-3293-4D06-89AA-7A20A845457C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{682CEB59-F6C0-48D2-AF51-BBE1665BE6B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControleClinico.Test", "ControleClinico.Test\ControleClinico.Test.csproj", "{A87572C7-48E0-45D8-9A66-51D85EAB5A7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControleClinico.Test", "ControleClinico.Test\ControleClinico.Test.csproj", "{A87572C7-48E0-45D8-9A66-51D85EAB5A7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControleClinico.API", "ControleClinico.API\ControleClinico.API.csproj", "{305F0E57-41AF-4119-BAA6-5E6C389EE051}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControleClinico.API", "ControleClinico.API\ControleClinico.API.csproj", "{305F0E57-41AF-4119-BAA6-5E6C389EE051}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControleClinico.Infra.IoC", "ControleClinico.Infra.IoC\ControleClinico.Infra.IoC.csproj", "{1E4D8144-05E1-4E93-BFD1-F2C5D14E7C7C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{305F0E57-41AF-4119-BAA6-5E6C389EE051}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{305F0E57-41AF-4119-BAA6-5E6C389EE051}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{305F0E57-41AF-4119-BAA6-5E6C389EE051}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E4D8144-05E1-4E93-BFD1-F2C5D14E7C7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E4D8144-05E1-4E93-BFD1-F2C5D14E7C7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E4D8144-05E1-4E93-BFD1-F2C5D14E7C7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E4D8144-05E1-4E93-BFD1-F2C5D14E7C7C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,5 +69,9 @@ Global
 		{682CEB59-F6C0-48D2-AF51-BBE1665BE6B5} = {B5AA38DD-6FB9-44F8-88D9-BBC553A919CD}
 		{A87572C7-48E0-45D8-9A66-51D85EAB5A7F} = {682CEB59-F6C0-48D2-AF51-BBE1665BE6B5}
 		{305F0E57-41AF-4119-BAA6-5E6C389EE051} = {7FF054C9-9819-42B1-B796-F4A694B69275}
+		{1E4D8144-05E1-4E93-BFD1-F2C5D14E7C7C} = {029FD543-5A20-44F7-99DD-7515922BDE5C}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C5C18987-1A1C-451C-B83B-550989B6C02D}
 	EndGlobalSection
 EndGlobal

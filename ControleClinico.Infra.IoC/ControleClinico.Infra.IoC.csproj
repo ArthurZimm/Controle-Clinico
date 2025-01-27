@@ -7,17 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Contracts\Infraestructure\**" />
-    <EmbeddedResource Remove="Contracts\Infraestructure\**" />
-    <None Remove="Contracts\Infraestructure\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ControleClinico.Domain\ControleClinico.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <ProjectReference Include="..\ControleClinico.Infraestructure\ControleClinico.Infraestructure.csproj" />
   </ItemGroup>
 
 </Project>

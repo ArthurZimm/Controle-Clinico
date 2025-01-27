@@ -19,10 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ControleClinico.Application\ControleClinico.Application.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\ControleClinico.Infra.IoC\ControleClinico.Infra.IoC.csproj" />
   </ItemGroup>
 
 </Project>

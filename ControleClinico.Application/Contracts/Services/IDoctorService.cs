@@ -3,7 +3,7 @@ using ControleClinico.Application.DTOs.Response;
 
 namespace ControleClinico.Application.Contracts.Services
 {
-    public interface IPatientService : IAsyncServices<PatientRequest, PatientResponse>
+    public interface IDoctorService : IAsyncServices<DoctorRequest, DoctorResponse>
     {
     }
 }

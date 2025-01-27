@@ -1,5 +1,4 @@
-using ControleClinico.Infraestructure.Context;
-using Microsoft.EntityFrameworkCore;
+using ControleClinico.Infra.IoC;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +9,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<ClinicalDbContext>();
+//Serviços
+DependencyInjection.AddInfrastructure(builder.Services, builder.Configuration);
+
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
