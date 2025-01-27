@@ -8,11 +8,11 @@ O **Controle Clínico** é uma aplicação destinada a auxiliar no gerenciamento
 
 ## Funcionalidades
 
-- Cadastro de pacientes com informações detalhadas.
-- Agendamento e gerenciamento de consultas médicas.
-- Registro e consulta de prontuários eletrônicos.
-- Gestão de médicos e especialidades.
-- Relatórios e estatísticas sobre atendimentos.
+- Cadastro de pacientes com informações detalhadas.(Em construção)
+- Agendamento e gerenciamento de consultas médicas.(A fazer)
+- Registro e consulta de prontuários eletrônicos.(A fazer)
+- Gestão de médicos e especialidades.(A fazer)
+- Relatórios e estatísticas sobre atendimentos.(A fazer)
 
 ## Estrutura do Projeto
 
