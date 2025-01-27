@@ -29,7 +29,6 @@ O projeto está organizado nas seguintes camadas:
 
 - **Linguagem**: C#
 - **Framework**: .NET Core
-- **Banco de Dados**: [Especificar o banco de dados utilizado, por exemplo, SQL Server, MySQL]
-- **ORM**: [Especificar o ORM utilizado, por exemplo, Entity Framework Core]
-- **Injeção de Dependência**: [Especificar o container de DI utilizado, por exemplo, Microsoft.Extensions.DependencyInjection]
-- **Testes**: [Especificar o framework de testes utilizado, por exemplo, xUnit, NUnit]
+- **Banco de Dados**: Postgres
+- **ORM**: Entity Framework Core
+- **Testes**: xUnit
