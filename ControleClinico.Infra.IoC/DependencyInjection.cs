@@ -21,6 +21,7 @@ namespace ControleClinico.Infra.IoC
             services.AddScoped(typeof(IAsyncRepository<>), typeof(BaseRepository<>));
             services.AddScoped<IPatientService, PatientService>();
             services.AddScoped<IDoctorService, DoctorService>();
+            services.AddScoped<IConsultationService, ConsultationService>();
             services.AddAutoMapper(typeof(PatientMapping));
 
 

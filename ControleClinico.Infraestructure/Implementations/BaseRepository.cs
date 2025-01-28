@@ -18,7 +18,7 @@ namespace ControleClinico.Infraestructure.Implementations
            return await _context.Set<T>().FindAsync(id);
         }
 
-        public async Task<IReadOnlyList<T>?> GetAll()
+        public async Task<IReadOnlyList<T>?> GetAllAsync()
         {
             return await _context.Set<T>().ToListAsync();
         }

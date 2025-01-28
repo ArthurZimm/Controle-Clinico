@@ -14,7 +14,7 @@ namespace ControleClinico.Application.Services
             throw new NotImplementedException();
         }
 
-        public Task<(bool result, string message, IReadOnlyList<T2>)> GetAllAsync()
+        public Task<(bool result, string message, IReadOnlyList<T2> response)> GetAllAsync()
         {
             throw new NotImplementedException();
         }

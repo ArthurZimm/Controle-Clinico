@@ -17,11 +17,11 @@ namespace ControleClinico.Application.Services
             this.patientRepository = patientRepository;
             this.mapper = mapper;
         }
-        public async Task<(bool result, string message, IReadOnlyList<PatientResponse>?)> GetAllAsync()
+        public async Task<(bool result, string message, IReadOnlyList<PatientResponse>? response)> GetAllAsync()
         {
             try
             {
-                var patientList = await patientRepository.GetAll();
+                var patientList = await patientRepository.GetAllAsync();
                 if(patientList == null)
                 {
                     return (false, "Nenhum paciente encontrado", null);

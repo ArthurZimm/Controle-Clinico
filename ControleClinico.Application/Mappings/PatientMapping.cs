@@ -14,6 +14,8 @@ namespace ControleClinico.Application.Mappings
             CreateMap<Patient, PatientResponse>();
             CreateMap<DoctorRequest, Doctor>();
             CreateMap<Doctor, DoctorResponse>();
+            CreateMap<ConsultationRequest, Consultation>();
+            CreateMap<Consultation, ConsultationResponse>();
         }
     }
 }

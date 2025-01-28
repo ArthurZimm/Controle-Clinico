@@ -2,7 +2,7 @@
 {
     public interface IAsyncRepository<T> where T : class
     {
-        Task<IReadOnlyList<T>?> GetAll();
+        Task<IReadOnlyList<T>?> GetAllAsync();
         Task<T?> GetByIdAsync(int id);
         Task<T> GetByNameAsync(string name);
         Task<T?> AddAsync(T entity);
