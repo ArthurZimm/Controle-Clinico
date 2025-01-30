@@ -10,11 +10,16 @@ namespace ControleClinico.Application.Services
     public class ConsultationService : IConsultationService
     {
         private readonly IAsyncRepository<Consultation> _consultationRepository;
+        private readonly IAsyncRepository<Doctor> _doctorRepository;
+        private readonly IAsyncRepository<Patient> _patientRepository;
         private readonly IMapper mapper;
 
-        public ConsultationService(IAsyncRepository<Consultation> consultationRepository, IMapper mapper)
+        public ConsultationService(IAsyncRepository<Consultation> consultationRepository, IAsyncRepository<Doctor> doctorRepository, 
+                                    IAsyncRepository<Patient> patientRepository, IMapper mapper)
         {
             _consultationRepository = consultationRepository;
+            _doctorRepository = doctorRepository;
+            _patientRepository = patientRepository;
             this.mapper = mapper;
         }
 
@@ -56,6 +61,14 @@ namespace ControleClinico.Application.Services
 
         public async Task<(bool result, string message, ConsultationResponse? response)> AddAsync(ConsultationRequest entity)
         {
+            entity.Doctor = await _doctorRepository.GetByNameAsync(entity.DoctorName);
+            if(entity.Doctor == null)
+                return (false, "Médico não encontrado", null);
+            entity.Patient = await _patientRepository.GetByNameAsync(entity.PatientName);
+            if(entity.Patient == null)
+                return (false, "Paciente não encontrado", null);
+            if(!await VerifyDoctorCalendar(entity.DoctorName, entity.Date))
+                return (false, "Médico já possui consulta nesse horário", null);
             try
             {
                 var newConsultation = await _consultationRepository.AddAsync(mapper.Map<Consultation>(entity));
@@ -103,6 +116,14 @@ namespace ControleClinico.Application.Services
             {
                 return (false, ex.Message);
             }
+        }
+
+        public async Task<bool> VerifyDoctorCalendar(string name, DateTime consultationDate)
+        {
+            var doctor = await _doctorRepository.GetByNameAsync(name);
+            if(doctor.Consultations.First(t => t.Date == consultationDate) != null)
+                return false;
+            return true;
         }
     }
 }

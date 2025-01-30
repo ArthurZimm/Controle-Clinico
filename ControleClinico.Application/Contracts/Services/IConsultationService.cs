@@ -6,5 +6,6 @@ namespace ControleClinico.Application.Contracts.Services
     public interface IConsultationService : IAsyncServices<ConsultationRequest, ConsultationResponse>
     {
         Task<(bool result, string message, ConsultationResponse response)> GetConsultationById(int id);
+        Task<bool> VerifyDoctorCalendar(string name, DateTime consultationDate);
     }
 }
