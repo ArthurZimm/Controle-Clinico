@@ -7,7 +7,6 @@ namespace ControleClinico.Application.Mappings
 {
     public class PatientMapping : Profile
     {
-
         public PatientMapping()
         {
             CreateMap<PatientRequest, Patient>();

@@ -4,7 +4,7 @@ namespace ControleClinico.Domain.Entity
 {
     public class Address
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; } = new Guid();
 
         [Required(ErrorMessage = "A rua é requerido")]
         [StringLength(60, ErrorMessage = "A rua deve ter no máximo 60 caracteres")]

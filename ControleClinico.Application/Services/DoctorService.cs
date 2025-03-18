@@ -9,92 +9,59 @@ namespace ControleClinico.Application.Services
 {
     public class DoctorService : IDoctorService
     {
-        private readonly IAsyncRepository<Doctor> doctorRepository;
+        private readonly IDoctorRepository _doctorRepository;
         private readonly IMapper mapper;
 
-        public DoctorService(IAsyncRepository<Doctor> doctorRepository, IMapper mapper)
+        public DoctorService(IDoctorRepository doctorRepository, IMapper mapper)
         {
-            this.doctorRepository = doctorRepository;
+            _doctorRepository = doctorRepository;
             this.mapper = mapper;
         }
-
-        public async Task<(bool result, string message, IReadOnlyList<DoctorResponse>? response)> GetAllAsync()
+        public async Task<(bool, string, List<DoctorResponse>?)> GetAllDoctors()
         {
-            try
+            var doctors = await _doctorRepository.GetAllDoctors();
+            if (doctors.Item1)
             {
-                var doctorList = doctorRepository.GetAllAsync();
-                if (doctorList == null)
-                {
-                    return (false, "Nenhum médico encontrado", null);
-                }
-                return (true, string.Empty, mapper.Map<IReadOnlyList<DoctorResponse>>(doctorList));
+                return (true, string.Empty, mapper.Map<List<DoctorResponse>>(doctors.Item3));
             }
-            catch (Exception ex)
-            {
-                return (false, ex.Message, null);
-            }
+            return (false, "error when searching for doctors", null);
         }
 
-        public async Task<(bool result, string message, DoctorResponse? response)> AddAsync(DoctorRequest entity)
+        public async Task<(bool, string, DoctorResponse?)> GetDoctorByCrm(string crm)
         {
-            try
+            var doctor = await _doctorRepository.GetDoctorByCrm(crm);
+            if (doctor.Item1)
             {
-                var doctor = await doctorRepository.GetByNameAsync(entity.Name);
-                if (doctor == null)
-                {
-                    var result = await doctorRepository.AddAsync(mapper.Map<Doctor>(entity));
-                    if (result == null)
-                    {
-                        return (false, "Ocorreu um erro ao enviar os dados", null);
-                    }
-                    return (true, string.Empty, mapper.Map<DoctorResponse>(result));
-                }
-                return (false, "Médico já cadastrado", mapper.Map<DoctorResponse>(doctor));
+                return (true, string.Empty, mapper.Map<DoctorResponse>(doctor.Item3));
             }
-            catch (Exception ex)
-            {
-                return (false, ex.Message, null);
-            }
+            return (false, "error when searching for doctor", null);
         }
-
-        public async Task<(bool result, string message, DoctorResponse? response)> UpdateAsync(DoctorRequest entity)
+        public async Task<(bool, string, DoctorResponse?)> AddDoctor(DoctorRequest doctor)
         {
-            try
+            var doctorResponse = await _doctorRepository.AddDoctor(mapper.Map<Doctor>(doctor));
+            if (doctorResponse.Item1)
             {
-                var doctor = await doctorRepository.GetByNameAsync(entity.Name);
-                if (doctor == null)
-                {
-                    return (false, "Médico não encontrado", null);
-                }
-                var result = await doctorRepository.UpdateAsync(mapper.Map<Doctor>(entity));
-                if (result == null)
-                {
-                    return (false, "Ocorreu um erro ao enviar os dados", null);
-                }
-                return (true, string.Empty, mapper.Map<DoctorResponse>(result));
+                return (true, string.Empty, mapper.Map<DoctorResponse>(doctorResponse.Item3));
             }
-            catch (Exception ex)
-            {
-                return (false, ex.Message, null);
-            }
+            return (false, "error when adding doctor", null);
         }
-        public async Task<(bool result, string message)> DeleteAsync(int id)
+        public async Task<(bool, string, DoctorResponse?)> UpdateDoctor(DoctorRequest doctor)
         {
-            try
+            var doctorResponse = await _doctorRepository.UpdateDoctor(mapper.Map<Doctor>(doctor));
+            if (doctorResponse.Item1)
             {
-                var doctor = doctorRepository.GetByIdAsync(id);
-                if (doctor == null)
-                {
-                    return (false, "Médico não encontrado");
-                }
-                await doctorRepository.DeleteAsync(mapper.Map<Doctor>(doctor));
-                return (true, "Médico removido com sucesso");
+                return (true, string.Empty, mapper.Map<DoctorResponse>(doctorResponse.Item3));
             }
-            catch (Exception ex)
-            {
-                return (false, ex.Message);
-            }
+            return (false, "error when updating doctor", null);
         }
-
+        public async Task<(bool, string)> DeleteDoctor(DoctorRequest doctor)
+        {
+            var doctorResponse = await _doctorRepository.DeleteDoctor(mapper.Map<Doctor>(doctor));
+            if (doctorResponse.Item1)
+            {
+                return (true, string.Empty);
+            }
+            return (false, "error when deleting doctor");
+        }
     }
 }

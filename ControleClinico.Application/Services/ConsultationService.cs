@@ -9,121 +9,100 @@ namespace ControleClinico.Application.Services
 {
     public class ConsultationService : IConsultationService
     {
-        private readonly IAsyncRepository<Consultation> _consultationRepository;
-        private readonly IAsyncRepository<Doctor> _doctorRepository;
-        private readonly IAsyncRepository<Patient> _patientRepository;
-        private readonly IMapper mapper;
+        private readonly IConsultationRepository _consultationRepository;
+        private readonly IDoctorRepository _doctorRepository;
+        private readonly IPatientRepository _patientRepository;
+        private readonly IMapper _mapper;
 
-        public ConsultationService(IAsyncRepository<Consultation> consultationRepository, IAsyncRepository<Doctor> doctorRepository, 
-                                    IAsyncRepository<Patient> patientRepository, IMapper mapper)
+        public ConsultationService(IConsultationRepository consultationRepository, IDoctorRepository doctorRepository, 
+            IPatientRepository patientRepository, IMapper mapper)
         {
             _consultationRepository = consultationRepository;
             _doctorRepository = doctorRepository;
             _patientRepository = patientRepository;
-            this.mapper = mapper;
+            _mapper = mapper;
         }
 
-        public async Task<(bool result, string message, IReadOnlyList<ConsultationResponse>? response)> GetAllAsync()
+        public async Task<(bool, string, ConsultationResponse?)> GetConsultationById(Guid id)
         {
-            try
+            var consultation = await _consultationRepository.GetConsultationById(id);
+            if (consultation.Item1)
             {
-                var consultations = await _consultationRepository.GetAllAsync();
-                if (consultations == null)
-                {
-                    return (false, "Sem Consultas", null);
-                }
-                return (true, string.Empty, mapper.Map<IReadOnlyList<ConsultationResponse>?>(consultations)) ;
+                return (true, string.Empty, _mapper.Map<ConsultationResponse>(consultation.Item3));
             }
-            catch (Exception ex)
-            {
-
-                return (false, ex.Message, null);
-            }
+            return (false, "Consultation not found", null);
         }
 
-        public async Task<(bool result, string message, ConsultationResponse? response)> GetConsultationById(int id)
+        public async Task<(bool, string, List<ConsultationResponse>?)> GetConsultationsByDoctorCrm(string doctorCrm)
         {
-            try
+            var consultations = await _consultationRepository.GetConsultationsByDoctorCrm(doctorCrm);
+            if (consultations.Item1)
             {
-                var consultation = await _consultationRepository.GetByIdAsync(id);
-                if (consultation == null)
-                {
-                    return (false, "Sem Consultas", null);
-                }
-                return (true, string.Empty, mapper.Map<ConsultationResponse?>(consultation));
+                return (true, string.Empty, _mapper.Map<List<ConsultationResponse>>(consultations.Item3));
             }
-            catch (Exception ex)
-            {
-
-                return (false, ex.Message, null);
-            }
+            return (false, "Consultations not found", null);
         }
 
-        public async Task<(bool result, string message, ConsultationResponse? response)> AddAsync(ConsultationRequest entity)
+        public async Task<(bool, string, List<ConsultationResponse>?)> GetConsultationsByPatientCpf(string patientCpf)
         {
-            entity.Doctor = await _doctorRepository.GetByNameAsync(entity.DoctorName);
-            if(entity.Doctor == null)
-                return (false, "Médico não encontrado", null);
-            entity.Patient = await _patientRepository.GetByNameAsync(entity.PatientName);
-            if(entity.Patient == null)
-                return (false, "Paciente não encontrado", null);
-            if(!await VerifyDoctorCalendar(entity.DoctorName, entity.Date))
-                return (false, "Médico já possui consulta nesse horário", null);
-            try
+            var consultations = await _consultationRepository.GetConsultationsByPatientCpf(patientCpf);
+            if (consultations.Item1)
             {
-                var newConsultation = await _consultationRepository.AddAsync(mapper.Map<Consultation>(entity));
-                if(newConsultation == null)
-                {
-                    return (false, "Erro ao adicionar consulta", null);
-                }
-                return (true, string.Empty, mapper.Map<ConsultationResponse>(newConsultation));
+                return (true, string.Empty, _mapper.Map<List<ConsultationResponse>>(consultations.Item3));
             }
-            catch (Exception ex)
-            {
-             return (false, ex.Message, null);
-            }
+            return (false, "Consultations not found", null);
         }
-        public async Task<(bool result, string message, ConsultationResponse? response)> UpdateAsync(ConsultationRequest entity)
+        public async Task<(bool, string, ConsultationResponse?)> AddConsultation(AppointmentRequest appointmentRequest)
         {
-            try
+            var doctorConsultation = await VerifyDoctorCalendar(appointmentRequest.DoctorCrm, appointmentRequest.Date);
+            if (!doctorConsultation)
             {
-                var consultation = await _consultationRepository.UpdateAsync(mapper.Map<Consultation>(entity));
-                if (consultation == null)
-                {
-                    return (false, "Erro ao atualizar consulta", null);
-                }
-                return (true, string.Empty, mapper.Map<ConsultationResponse>(consultation));
+                return (false, "Doctor already has a consultation scheduled for this date", null);
             }
-            catch (Exception ex)
+            var patient = await _patientRepository.GetPatientByCpf(appointmentRequest.PatientCpf);
+            var doctor = await _doctorRepository.GetDoctorByCrm(appointmentRequest.DoctorCrm);
+            if(!patient.Item1 || !doctor.Item1)
             {
-                return (false, ex.Message, null);
+                return (false, "Patient or Doctor not found", null);
             }
+            var consultationRequest = new ConsultationRequest(appointmentRequest.Description,appointmentRequest.Date, doctor.Item3!, patient.Item3!);
+            var result = await _consultationRepository.AddConsultation(_mapper.Map<Consultation>(consultationRequest));
+            if (result.Item1)
+            {
+                return (true, string.Empty, _mapper.Map<ConsultationResponse>(result.Item3));
+            }
+            return (false, "Error adding consultation", null);
         }
-
-        public async Task<(bool result, string message)> DeleteAsync(int id)
+        public async Task<(bool, string, ConsultationResponse?)> UpdateConsultation(ConsultationRequest consultation)
         {
-            try
+            var result = await _consultationRepository.UpdateConsultation(_mapper.Map<Consultation>(consultation));
+            if (result.Item1)
             {
-                var consultation = await _consultationRepository.GetByIdAsync(id);
-                if (consultation == null)
-                {
-                    return (false, "Consulta não encontrada");
-                }
-                await _consultationRepository.DeleteAsync(consultation);
+                return (true, string.Empty, _mapper.Map<ConsultationResponse>(result.Item3));
+            }
+            return (false, "Error updating consultation", null);
+        }
+        public async Task<(bool, string)> DeleteConsultation(ConsultationRequest consultation)
+        {
+            var result = await _consultationRepository.DeleteConsultation(_mapper.Map<Consultation>(consultation));
+            if (result.Item1)
+            {
                 return (true, string.Empty);
             }
-            catch (Exception ex)
-            {
-                return (false, ex.Message);
-            }
+            return (false, "Error deleting consultation");
         }
-
-        public async Task<bool> VerifyDoctorCalendar(string name, DateTime consultationDate)
+        public async Task<bool> VerifyDoctorCalendar(string doctorCrm, DateTime date)
         {
-            var doctor = await _doctorRepository.GetByNameAsync(name);
-            if(doctor.Consultations.First(t => t.Date == consultationDate) != null)
+            var consultations = await _consultationRepository.GetConsultationsByDoctorCrm(doctorCrm);
+            if (consultations.Item1)
+            {
+                if(consultations.Item3!.FirstOrDefault(x=>x.Date == date) == null)
+                {
+                    return true;
+                }
                 return false;
-            return true;
+            }
+            return false;
         }
     }
 }

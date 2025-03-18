@@ -2,7 +2,7 @@
 {
     public class ReturnModel
     {
-        public ReturnModel(int statusCode, string message, object data)
+        public ReturnModel(int statusCode, string message, object? data)
         {
             StatusCode = statusCode;
             Message = message;
@@ -11,6 +11,6 @@
 
         public int StatusCode { get; set; }
         public string Message { get; set; }
-        public object Data { get; set; }
+        public object? Data { get; set; }
     }
 }

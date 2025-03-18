@@ -9,91 +9,70 @@ namespace ControleClinico.Application.Services
 {
     public class PatientService : IPatientService
     {
-        protected readonly IAsyncRepository<Patient> patientRepository;
+        private readonly IPatientRepository patientRepository;
         private readonly IMapper mapper;
 
-        public PatientService(IAsyncRepository<Patient> patientRepository, IMapper mapper)
+        public PatientService(IPatientRepository patientRepository, IMapper mapper)
         {
             this.patientRepository = patientRepository;
             this.mapper = mapper;
         }
-        public async Task<(bool result, string message, IReadOnlyList<PatientResponse>? response)> GetAllAsync()
+
+        public async Task<(bool, string, List<PatientResponse>?)> GetAllPatients()
         {
-            try
+            var patients = await patientRepository.GetAllPatients();
+            if (patients.Item1)
             {
-                var patientList = await patientRepository.GetAllAsync();
-                if(patientList == null)
-                {
-                    return (false, "Nenhum paciente encontrado", null);
-                }
-                return (true, string.Empty, mapper.Map<IReadOnlyList<PatientResponse>>(patientList));
+                return (true, string.Empty, mapper.Map<List<PatientResponse>>(patients.Item3));
             }
-            catch (Exception ex)
-            {
-                return (false, ex.Message, null);
-            }
-        }
-        
-        public async Task<(bool result, string message, PatientResponse? response)> AddAsync(PatientRequest entity)
-        {
-            try
-            {
-                var patient = await patientRepository.GetByNameAsync(entity.Name);
-                if (patient == null)
-                {
-                    var result = await patientRepository.AddAsync(mapper.Map<Patient>(entity));
-                    if (result == null)
-                    {
-                        return (false, "Ocorreu um erro ao enviar os dados", null);
-                    }
-                    return (true, string.Empty, mapper.Map<PatientResponse>(result));
-                }
-                return (false, "Paciente já cadastrado", mapper.Map<PatientResponse>(patient));
-            }
-            catch (Exception ex)
-            {
-                return (false, ex.Message, null);
-            }
+            return (false, "Error when searching for patients", null);
         }
 
-        public async Task<(bool result, string message)> DeleteAsync(int id)
+        public async Task<(bool, string, PatientResponse?)> GetPatientByCpf(string cpf)
         {
-            try
+            var patient = await patientRepository.GetPatientByCpf(cpf);
+            if (patient.Item1)
             {
-                var patient = await patientRepository.GetByIdAsync(id);
-                if (patient == null)
-                {
-                    return (false, "Paciente não encontrado");
-                }
-                await patientRepository.DeleteAsync(patient);
-                return (true, "Paciente removido com sucesso");
+                return (true, string.Empty, mapper.Map<PatientResponse>(patient.Item3));
             }
-            catch (Exception ex)
-            {
-                return (false, ex.Message);
-            }
+            return (false, "Error when searching for patient", null);
         }
 
-        public async Task<(bool result, string message, PatientResponse? response)> UpdateAsync(PatientRequest entity)
+        public async Task<(bool, string, PatientResponse?)> GetPatientByName(string name)
         {
-            try
+            var patient = await patientRepository.GetPatientByName(name);
+            if (patient.Item1)
             {
-                var patient = await patientRepository.GetByNameAsync(entity.Name);
-                if (patient == null)
-                {
-                    return (false, "Paciente não encontrado", null);
-                }
-                var result = await patientRepository.UpdateAsync(mapper.Map<Patient>(entity));
-                if (result == null)
-                {
-                    return (false, "Ocorreu um erro ao enviar os dados", null);
-                }
-                return (true, string.Empty, mapper.Map<PatientResponse>(result));
+                return (true, string.Empty, mapper.Map<PatientResponse>(patient.Item3));
             }
-            catch (Exception ex)
-            {
-                return (false, ex.Message, null);
-            }
+            return (false, "Error when searching for patient", null);
         }
+        public async Task<(bool, string, PatientResponse?)> AddPatient(PatientRequest patient)
+        {
+            var result = await patientRepository.AddPatient(mapper.Map<Patient>(patient));
+            if (result.Item1)
+            {
+                return (true, string.Empty, mapper.Map<PatientResponse>(result.Item3));
+            }
+            return (false, "Error when adding patient", null);
+        }
+        public async Task<(bool, string, PatientResponse?)> UpdatePatient(PatientRequest patient)
+        {
+            var result = await patientRepository.UpdatePatient(mapper.Map<Patient>(patient));
+            if (result.Item1)
+            {
+                return (true, string.Empty, mapper.Map<PatientResponse>(result.Item3));
+            }
+            return (false, "Error when updating patient", null);
+        }
+        public async Task<(bool, string)> DeletePatient(PatientRequest patient)
+        {
+            var result = await patientRepository.DeletePatient(mapper.Map<Patient>(patient));
+            if (result.Item1)
+            {
+                return (true, string.Empty);
+            }
+            return (false, "Error when deleting patient");
+        }       
     }
 }

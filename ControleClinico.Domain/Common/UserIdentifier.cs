@@ -1,7 +1,10 @@
-﻿namespace ControleClinico.Domain.Common
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ControleClinico.Domain.Common
 {
     public abstract class UserIdentifier
     {
-        public int Id { get; set; }        
+        [Key]
+        public Guid Id { get; set; } = Guid.NewGuid();
     }
 }

@@ -14,14 +14,21 @@ namespace ControleClinico.Infra.IoC
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-
+            //-------------------DbContext-------------------
             services.AddDbContext<ClinicalDbContext>(options =>
                            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddScoped(typeof(IAsyncRepository<>), typeof(BaseRepository<>));
+            //-------------------Repositories-------------------
+            services.AddScoped<IDoctorRepository,DoctorRepository>();
+            services.AddScoped<IPatientRepository,PatientRepository>();
+            services.AddScoped<IConsultationRepository,ConsultationRepository>();
+
+            //-------------------Services-------------------
             services.AddScoped<IPatientService, PatientService>();
             services.AddScoped<IDoctorService, DoctorService>();
             services.AddScoped<IConsultationService, ConsultationService>();
+
+            //-------------------AutoMapper-------------------
             services.AddAutoMapper(typeof(PatientMapping));
 
 

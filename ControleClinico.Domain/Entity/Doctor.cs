@@ -18,7 +18,7 @@ namespace ControleClinico.Domain.Entity
         [Required(ErrorMessage = "O CRM é requerido")]
         public string Crm { get; set; }
         [Required(ErrorMessage = "A especialidade é requerida")]
-        public List<string> Specialty { get; set; }
+        public string Specialty { get; set; }
 
         public virtual ICollection<Consultation> Consultations { get; set; }
     }

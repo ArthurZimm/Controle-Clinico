@@ -1,4 +1,5 @@
-﻿using ControleClinico.Application.Contracts.Services;
+﻿using ControleClinico.API.Models;
+using ControleClinico.Application.Contracts.Services;
 using ControleClinico.Application.DTOs.Request;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,65 +9,70 @@ namespace ControleClinico.API.Controllers
     [Route("api/[controller]")]
     public class ConsultationController : ControllerBase
     {
-        private readonly IConsultationService consultationService;
-
+        private readonly IConsultationService _consultationService;
         public ConsultationController(IConsultationService consultationService)
         {
-            this.consultationService = consultationService;
+            _consultationService = consultationService;
         }
-
-        [HttpGet("/get-all-consultations")]
-        public async Task<IActionResult> GetAllAsync()
+        [HttpGet("/get-consultation/id/{id}")]
+        public async Task<ReturnModel> GetConsultationById(Guid id)
         {
-            var result = await consultationService.GetAllAsync();
-            if (!result.result)
+            var result = await _consultationService.GetConsultationById(id);
+            if (result.Item1)
             {
-                return BadRequest(result.message);
+                return new ReturnModel(200, string.Empty, result.Item3);
             }
-            return Ok(result.response);
+            return new ReturnModel(404, result.Item2, default);
         }
-
-        [HttpGet("/get-consultation/{id}")]
-        public async Task<IActionResult> GetConsultationById([FromRoute]int id)
+        [HttpGet("/get-consultation/doctor-crm/{crm}")]
+        public async Task<ReturnModel> GetConsultationByDoctorCrm(string crm)
         {
-            var result = await consultationService.GetConsultationById(id);
-            if (!result.result)
+            var result = await _consultationService.GetConsultationsByDoctorCrm(crm);
+            if (result.Item1)
             {
-                return BadRequest(result.message);
+                return new ReturnModel(200, string.Empty, result.Item3);
             }
-            return Ok(result.response);
+            return new ReturnModel(404, result.Item2, default);
         }
-
+        [HttpGet("/get-consultation/patient-cpf/{cpf}")]
+        public async Task<ReturnModel> GetConsultationByPatientCpf(string cpf)
+        {
+            var result = await _consultationService.GetConsultationsByPatientCpf(cpf);
+            if (result.Item1)
+            {
+                return new ReturnModel(200, string.Empty, result.Item3);
+            }
+            return new ReturnModel(404, result.Item2, default);
+        }
         [HttpPost("/add-consultation")]
-        public async Task<IActionResult> AddAsync([FromBody] ConsultationRequest entity)
+        public async Task<ReturnModel> AddConsultation([FromBody] AppointmentRequest appointmentRequest)
         {
-            var result = await consultationService.AddAsync(entity);
-            if (!result.result)
+            var result = await _consultationService.AddConsultation(appointmentRequest);
+            if (result.Item1)
             {
-                return BadRequest(result.message);
+                return new ReturnModel(200, string.Empty, result.Item3);
             }
-            return Ok(result.response);
+            return new ReturnModel(400, result.Item2, default);
         }
         [HttpPut("/update-consultation")]
-        public async Task<IActionResult> UpdateAsync([FromBody] ConsultationRequest entity)
+        public async Task<ReturnModel> UpdateConsultation([FromBody] ConsultationRequest consultation)
         {
-            var result = await consultationService.UpdateAsync(entity);
-            if (!result.result)
+            var result = await _consultationService.UpdateConsultation(consultation);
+            if (result.Item1)
             {
-                return BadRequest(result.message);
+                return new ReturnModel(204, string.Empty, default);
             }
-            return Ok(result.response);
+            return new ReturnModel(400, result.Item2, default);
         }
-
-        [HttpDelete("/delete-consultation/{id}")]
-        public async Task<IActionResult> DeleteAsync([FromRoute] int id)
+        [HttpDelete("/delete-consultation")]
+        public async Task<ReturnModel> DeleteConsultation([FromBody] ConsultationRequest consultation)
         {
-            var result = await consultationService.DeleteAsync(id);
-            if (!result.result)
+            var result = await _consultationService.DeleteConsultation(consultation);
+            if (result.Item1)
             {
-                return BadRequest(result.message);
+                return new ReturnModel(204, string.Empty, default);
             }
-            return Ok(result);
+            return new ReturnModel(400, result.Item2, default);
         }
     }
 }
