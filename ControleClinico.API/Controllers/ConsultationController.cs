@@ -1,6 +1,7 @@
 ﻿using ControleClinico.API.Models;
 using ControleClinico.Application.Contracts.Services;
 using ControleClinico.Application.DTOs.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ControleClinico.API.Controllers
@@ -14,6 +15,7 @@ namespace ControleClinico.API.Controllers
         {
             _consultationService = consultationService;
         }
+        [Authorize]
         [HttpGet("/get-consultation/id/{id}")]
         public async Task<ReturnModel> GetConsultationById(Guid id)
         {
@@ -24,6 +26,7 @@ namespace ControleClinico.API.Controllers
             }
             return new ReturnModel(404, result.Item2, default);
         }
+        [Authorize]
         [HttpGet("/get-consultation/doctor-crm/{crm}")]
         public async Task<ReturnModel> GetConsultationByDoctorCrm(string crm)
         {
@@ -34,6 +37,7 @@ namespace ControleClinico.API.Controllers
             }
             return new ReturnModel(404, result.Item2, default);
         }
+        [Authorize]
         [HttpGet("/get-consultation/patient-cpf/{cpf}")]
         public async Task<ReturnModel> GetConsultationByPatientCpf(string cpf)
         {
@@ -44,6 +48,7 @@ namespace ControleClinico.API.Controllers
             }
             return new ReturnModel(404, result.Item2, default);
         }
+        [Authorize]
         [HttpPost("/add-consultation")]
         public async Task<ReturnModel> AddConsultation([FromBody] AppointmentRequest appointmentRequest)
         {
@@ -54,6 +59,7 @@ namespace ControleClinico.API.Controllers
             }
             return new ReturnModel(400, result.Item2, default);
         }
+        [Authorize]
         [HttpPut("/update-consultation")]
         public async Task<ReturnModel> UpdateConsultation([FromBody] ConsultationRequest consultation)
         {
@@ -64,6 +70,7 @@ namespace ControleClinico.API.Controllers
             }
             return new ReturnModel(400, result.Item2, default);
         }
+        [Authorize]
         [HttpDelete("/delete-consultation")]
         public async Task<ReturnModel> DeleteConsultation([FromBody] ConsultationRequest consultation)
         {

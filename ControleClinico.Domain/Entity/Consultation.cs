@@ -1,14 +1,10 @@
-﻿using System;
+﻿using ControleClinico.Domain.Common;
 using System.ComponentModel.DataAnnotations;
-using ControleClinico.Domain.Common;
 
 namespace ControleClinico.Domain.Entity
 {
     public class Consultation : UserIdentifier
     {
-        [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
-
         [Required(ErrorMessage = "A descrição é requerida")]
         [StringLength(500, MinimumLength = 10, ErrorMessage = "A descrição deve ter entre 10 e 500 caracteres")]
         public string Description { get; set; }

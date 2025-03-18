@@ -1,7 +1,7 @@
-﻿using AutoMapper;
-using ControleClinico.API.Models;
+﻿using ControleClinico.API.Models;
 using ControleClinico.Application.Contracts.Services;
 using ControleClinico.Application.DTOs.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ControleClinico.API.Controllers
@@ -16,6 +16,7 @@ namespace ControleClinico.API.Controllers
         {
             _patientService = patientService;
         }
+        [Authorize]
         [HttpGet("/get-all-patients")]
         public async Task<ReturnModel> GetAllPatients()
         {
@@ -26,6 +27,7 @@ namespace ControleClinico.API.Controllers
             }
             return new ReturnModel(404, patients.Item2, default);
         }
+        [Authorize]
         [HttpGet("/get-patient/cpf/{cpf}")]
         public async Task<ReturnModel> GetPatientByCpf(string cpf)
         {
@@ -36,6 +38,7 @@ namespace ControleClinico.API.Controllers
             }
             return new ReturnModel(404, patient.Item2, default);
         }
+        [Authorize]
         [HttpGet("/get-patient/name/{name}")]
         public async Task<ReturnModel> GetPatientByName(string name)
         {
@@ -46,6 +49,7 @@ namespace ControleClinico.API.Controllers
             }
             return new ReturnModel(404, patient.Item2, default);
         }
+        [Authorize]
         [HttpPost("/add-patient")]
         public async Task<ReturnModel> AddPatient([FromBody]PatientRequest patient)
         {
@@ -56,6 +60,7 @@ namespace ControleClinico.API.Controllers
             }
             return new ReturnModel(400, result.Item2, default);
         }
+        [Authorize]
         [HttpPut("/update-patient")]
         public async Task<ReturnModel> UpdatePatient([FromBody] PatientRequest patient)
         {
@@ -66,6 +71,7 @@ namespace ControleClinico.API.Controllers
             }
             return new ReturnModel(400, result.Item2, default);
         }
+        [Authorize]
         [HttpDelete("/delete-patient")]
         public async Task<ReturnModel> DeletePatient([FromBody] PatientRequest patient)
         {

@@ -9,6 +9,9 @@ namespace ControleClinico.Application.Mappings
     {
         public PatientMapping()
         {
+            CreateMap<UserRequest, User>();
+            CreateMap<User, UserResponse>();
+            CreateMap<RegisterRequest, User>();
             CreateMap<PatientRequest, Patient>();
             CreateMap<Patient, PatientResponse>();
             CreateMap<DoctorRequest, Doctor>();

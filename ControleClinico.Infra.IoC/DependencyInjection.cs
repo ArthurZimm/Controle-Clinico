@@ -22,11 +22,15 @@ namespace ControleClinico.Infra.IoC
             services.AddScoped<IDoctorRepository,DoctorRepository>();
             services.AddScoped<IPatientRepository,PatientRepository>();
             services.AddScoped<IConsultationRepository,ConsultationRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             //-------------------Services-------------------
             services.AddScoped<IPatientService, PatientService>();
             services.AddScoped<IDoctorService, DoctorService>();
             services.AddScoped<IConsultationService, ConsultationService>();
+            services.AddScoped<IUserService, UserService>();
+
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             //-------------------AutoMapper-------------------
             services.AddAutoMapper(typeof(PatientMapping));

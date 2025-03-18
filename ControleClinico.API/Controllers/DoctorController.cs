@@ -1,6 +1,7 @@
 ﻿using ControleClinico.API.Models;
 using ControleClinico.Application.Contracts.Services;
 using ControleClinico.Application.DTOs.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ControleClinico.API.Controllers
@@ -15,6 +16,7 @@ namespace ControleClinico.API.Controllers
         {
             _doctorService = doctorService;
         }
+        [Authorize]
         [HttpGet("/get-all")]
         public async Task<ReturnModel> GetAllDoctors()
         {
@@ -25,6 +27,7 @@ namespace ControleClinico.API.Controllers
             }
             return new ReturnModel(404,string.Empty,default);
         }
+        [Authorize]
         [HttpGet("/get-by-crm/{crm}")]
         public async Task<ReturnModel> GetDoctorByCrm(string crm)
         {
@@ -35,6 +38,7 @@ namespace ControleClinico.API.Controllers
             }
             return new ReturnModel(404,string.Empty,default);
         }
+        [Authorize]
         [HttpPost("/add-doctor")]
         public async Task<ReturnModel> AddDoctor([FromBody] DoctorRequest doctor)
         {
@@ -45,6 +49,7 @@ namespace ControleClinico.API.Controllers
             }
             return new ReturnModel(404,string.Empty,default);
         }
+        [Authorize]
         [HttpPut("/update-doctor")]
         public async Task<ReturnModel> UpdateDoctor([FromBody] DoctorRequest doctor)
         {
@@ -55,6 +60,7 @@ namespace ControleClinico.API.Controllers
             }
             return new ReturnModel(404,string.Empty,default);
         }
+        [Authorize]
         [HttpDelete("/delete-doctor")]
         public async Task<ReturnModel> DeleteDoctor([FromBody] DoctorRequest doctor)
         {
